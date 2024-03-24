@@ -1,5 +1,5 @@
 class BackButton {
-    static back() {
+    static back = () => {
         return window.history.back()
     }
 }

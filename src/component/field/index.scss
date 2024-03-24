@@ -17,6 +17,8 @@
 		padding: s.space(4);
 		border-radius: 10px;
 
+		font-size: 14px;
+
 		&::placeholder {
 			color: s.color('light');
 		}
