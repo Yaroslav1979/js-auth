@@ -101,7 +101,7 @@ class SignupForm extends Form {
         return JSON.stringify({
             [this.FIELD_NAME.EMAIL]:
                 this.value[this.FIELD_NAME.EMAIL],
-            [this.FIELD_NAME.PASSWORDL]:
+            [this.FIELD_NAME.PASSWORD]:
                 this.value[this.FIELD_NAME.PASSWORD],
                 [this.FIELD_NAME.ROLE]:
                 this.value[this.FIELD_NAME.ROLE],
