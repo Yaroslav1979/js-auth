@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
       // вказуємо назву контейнера
       name: 'index',
       // вказуємо назву компонентів
-      component: [],
+      component: ['heading'],
   
       // вказуємо назву сторінки
       title: 'Home page',
