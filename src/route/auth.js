@@ -5,6 +5,7 @@ const router = express.Router()
 
 const { User } = require('../class/user')
 const { Confirm } = require('../class/confirm')
+const { Session } = require('../class/session')
 
 
 User.create({
@@ -71,10 +72,15 @@ router.post('/signup', function (req, res) {
         })
       }
 
-    User.create({ email, password, role })
+    const newUser =  User.create({ email, password, role })
+
+    const session = Session.create(newUser)
+
+    
 
   return res.status(200).json({
     message: "Користувач успішно зареєстровний",
+    session,
   })
   } catch (err) {
     return res.status(400).json({
@@ -194,8 +200,11 @@ router.post('/recovery-confirm', function (req, res) {
 
     console.log(user)
 
+    const session = Session.create(user)
+
     return res.status(200).json ({
       message: 'Пароль успішно змінено',
+      session
     })
 
   } catch (err) {

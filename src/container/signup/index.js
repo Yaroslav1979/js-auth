@@ -1,5 +1,7 @@
 import { Form, REG_EXP_EMAIL, REG_EXP_PASSWORD } from "../../script/form"
 
+import { saveSession } from "../../script/session"
+
 class SignupForm extends Form {
 
     FIELD_NAME = {
@@ -10,7 +12,7 @@ class SignupForm extends Form {
         IS_CONFIRM: 'isConfirm',
     }
 
-    FIELD_ERROR = {
+     FIELD_ERROR = {
         IS_EMPTY: 'Введіть значення в поле',
         IS_BIG: 'Дуже довге значення, видаліть зайве',
         EMAIL: 'Введіть коретне значення e-mail адреси',
@@ -87,6 +89,8 @@ class SignupForm extends Form {
 
             if (res.ok) {
                 this.setAlert('success', data.message)
+               saveSession(data.session)
+               location.assign('/')
             } else {
                 this.setAlert('error', data.message)
             }
