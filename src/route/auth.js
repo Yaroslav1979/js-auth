@@ -76,7 +76,7 @@ router.post('/signup', function (req, res) {
 
     const session = Session.create(newUser)
 
-    
+    Confirm.create( newUser.email)
 
   return res.status(200).json({
     message: "Користувач успішно зареєстровний",
@@ -216,6 +216,189 @@ router.post('/recovery-confirm', function (req, res) {
 
 
 //--------------------------------------------------
+
+router.get('/signup-confirm', function (req, res) {
+  // res.render генерує нам HTML сторінку
+
+  const { renew, email } = req.query
+
+  if (renew) {
+    Confirm.create ()
+  }
+
+  // ↙️ cюди вводимо назву файлу з сontainer
+  return res.render('signup-confirm', {
+    // вказуємо назву контейнера
+    name: 'signup-confirm',
+    // вказуємо назву компонентів
+    component: ['back-button', 'field'],
+
+    // вказуємо назву сторінки
+    title: 'Signup confirm page',
+    // ... сюди можна далі продовжувати додавати потрібні технічні дані, які будуть використовуватися в layout
+
+    // вказуємо дані,
+    data: {},
+  })
+  // ↑↑ сюди вводимо JSON дані
+})
+//-----------------------------------------------
+
+router.post('/signup-confirm', function (req, res) {
+  const {code, token } = req.body
+
+  if (!code || !token) {
+    return res.status(400).json({
+      message: "Помилка! Обов'язкові поля відсутні"
+    })
+  }
+
+  try {
+    const session = Session.get(token)
+
+    if (!session) {
+      return res.status(400).json({
+      message: 'Помилка! Ви не увійшли в аккаунт',
+      })
+    }
+
+    const email = Confirm.getData(code)
+
+    if (!email) {
+      return res.status(400).json({
+        message: 'Код не існує',
+        })
+    }
+    if (email !== session.user.email) {
+      return res.status(400).json({
+        message: 'Код не дійсний',
+        })
+    }
+
+    const user = User.getByEmail(session.user.email)
+    user.isConfirm = true
+    session.user.isConfirm = true    
+
+    // session = Session.create()
+
+    return res.status(200).json({
+      message: 'Ви підтвердили свою пошту',
+      })
+ 
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message,
+    })
+  }
+ })
+
+ //--------------------------------------------
+
+ router.get('/login', function (req, res) {
+  // res.render генерує нам HTML сторінку
+
+  // ↙️ cюди вводимо назву файлу з сontainer
+  return res.render('login', {
+    // вказуємо назву контейнера
+    name: 'login',
+    // вказуємо назву компонентів
+    component: ['back-button', 'field', 'field-password'],
+
+    // вказуємо назву сторінки
+    title: 'Login page',
+    // ... сюди можна далі продовжувати додавати потрібні технічні дані, які будуть використовуватися в layout
+
+    // вказуємо дані,
+    data: {},
+  })
+  // ↑↑ сюди вводимо JSON дані
+})
+
+//-----------------------------------------------------------------------
+router.post('/login', function (req, res) {
+  const {email, password } = req.body
+
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "Помилка! Обов'язкові поля відсутні"
+    })
+  }
+
+  try {
+    const user = User.getByEmail(email)
+
+    if (!user) {
+      return res.status(400).json({
+        message: 'Помилка! Користувач з таким email не існує',
+        })
+    }
+
+    if (!user.password !== password) {
+      return res.status(400).json({
+        message: 'Помилка! Пароль не підходить',
+        })
+    }
+
+    const session = Session.create(user)
+
+    return res.status(200).json({
+      message: 'Ви увійшли',
+      session,
+      })
+
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message,
+  })
+}
+})
+
+//-----------------------------------------------------------
+router.get('/home', function (req, res) {
+  // res.render генерує нам HTML сторінку
+
+  // ↙️ cюди вводимо назву файлу з сontainer
+  return res.render('home', {
+    // вказуємо назву контейнера
+    name: 'home',
+    // вказуємо назву компонентів
+    component: [],
+
+    // вказуємо назву сторінки
+    title: 'Home page',
+    // ... сюди можна далі продовжувати додавати потрібні технічні дані, які будуть використовуватися в layout
+
+    // вказуємо дані,
+    data: {},
+  })
+  // ↑↑ сюди вводимо JSON дані
+})
+
+//-----------------------------------------------------------------------
+
+router.get('/logout', function (req, res) {
+  // res.render генерує нам HTML сторінку
+
+  // ↙️ cюди вводимо назву файлу з сontainer
+  return res.render('logout', {
+    // вказуємо назву контейнера
+    name: 'logout',
+    // вказуємо назву компонентів
+    component: [],
+
+    // вказуємо назву сторінки
+    title: 'Logout page',
+    // ... сюди можна далі продовжувати додавати потрібні технічні дані, які будуть використовуватися в layout
+
+    // вказуємо дані,
+    data: {},
+  })
+  // ↑↑ сюди вводимо JSON дані
+})
+
+//-----------------------------------------------------------------------
+
+
 
 // Підключаємо роутер до бек-енду
 module.exports = router
