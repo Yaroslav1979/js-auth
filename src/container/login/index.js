@@ -63,7 +63,7 @@ class SignupForm extends Form {
         } catch (error) {
             this.setAlert('error', error.message)
         }
-    }
+      }
     }
 
     convertData = () => {
