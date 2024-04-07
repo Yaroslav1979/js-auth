@@ -14,14 +14,14 @@ export class List {
 
     if (data) this.data = data
 
-    this.upddateView()
+    this.updateView()
   }
 
-  upddateView = () => {}
+  updateView = () => {}
 
   loadData = async () => {}
 
-  convertData = () => { }
+  convertData = () => {}
 
 }
  

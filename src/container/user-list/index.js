@@ -15,7 +15,7 @@ class UserList extends List{
     loadData = async () => {
        this.updateStatus(this.STATE.LOADING)
 
-       return null
+    //    return null
               
             try {
                 const res = await fetch('/user-list-data', {
@@ -27,7 +27,7 @@ class UserList extends List{
                 if (res.ok) {
                     this.updateStatus(
                     this.STATE.SUCCESS,
-                    this.convertData(data)
+                    this.convertData(data),
                 )
                 } else {
                     this.updateStatus(this.STATE.ERROR, data)
@@ -51,7 +51,7 @@ class UserList extends List{
           }
         }
 
-        upddateView = () => {
+        updateView = () => {
             this.element.innerHTML = ''
 
             console.log(this.status, this.data)
@@ -83,7 +83,7 @@ class UserList extends List{
 
                 case this.STATE.SUCCESS:
                     this.data.list.forEach((item) => {
-                        this.element.innerHTML = `
+                        this.element.innerHTML += `
                         <a href="/user-item?id=${item.id}" class="user user--click">
                         <span class="user__title">${item.email}</span>
                         <span class="user__sub">${item.role}</span> 
@@ -99,7 +99,6 @@ class UserList extends List{
                 break
             }
         }
-
     }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -111,5 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
         location.assign('/')       
     }
-} catch (err) {}
+} catch (e) {}
+
+new UserList()
 })
